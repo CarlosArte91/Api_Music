@@ -1,9 +1,12 @@
 const { Router } = require("express");
-
+const fs = require("fs");
 const router = Router();
 
-router.get("/", (req, res) => {
-    res.send({message: "conected"});
+fs.readdirSync(__dirname).forEach(file => {
+    if (file !== "index.js") {
+        let name = file.split(".")[0];
+        router.use(`/${name}`, require(`./${file}`));
+    }
 });
 
-module.exports.router = router;
+module.exports = router;
